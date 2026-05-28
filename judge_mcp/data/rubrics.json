@@ -1,0 +1,117 @@
+{
+  "_doc": "Rubrics are DATA; the judge is domain-agnostic. To add a new domain, write a rubric — you don't touch the engine. Each criterion carries a `guide` (what good looks like) and a `weight`; optional `anchors` calibrate the scale (a 9 vs a 3); optional `examples` are calibration samples with known scores. Ported from atelier-engine/lib/rubrics.js — same eight rubrics, ready for new ones via PR.",
+  "rubrics": {
+    "sneaker-design": {
+      "name": "Sneaker design quality",
+      "criteria": [
+        {"id": "zone_coherence",    "name": "Colourway coherence", "weight": 2, "guide": "The per-zone colours read as one intentional colourway, not random."},
+        {"id": "signature",         "name": "One iconic feature",  "weight": 2, "guide": "A single strong signature detail leads; the rest stays restrained (not a committee shoe)."},
+        {"id": "material_honesty",  "name": "Material honesty",    "weight": 1, "guide": "Materials are real and plausible for the silhouette; no fantasy/greenwashed materials."},
+        {"id": "buildable",         "name": "Buildable spec",      "weight": 2, "guide": "The spec is specific enough that a sample room could make it (zones, materials, construction named)."},
+        {"id": "story",             "name": "Story / point of view","weight": 1, "guide": "There's a clear reason this design exists; it's not generic."}
+      ],
+      "anchors": {
+        "high": "Forest-green suede court low with one tan-suede flight panel, gum sole, full zone spec + a clear training-run story.",
+        "low":  "A vibrant futuristic eco sneaker, cool vibes."
+      }
+    },
+    "watch-design": {
+      "name": "Watch design quality",
+      "criteria": [
+        {"id": "legibility",            "name": "Dial legibility & proportion", "weight": 2, "guide": "Indices, hands and any sub-dials are balanced, symmetric and readable; case/lug proportions are correct."},
+        {"id": "complication_coherence","name": "Complication coherence",       "weight": 2, "guide": "Complications (date, chrono sub-dials, bezel) fit the silhouette and don't crowd or contradict each other."},
+        {"id": "movement_honesty",      "name": "Movement-material honesty",    "weight": 1, "guide": "Movement and materials are plausible together (no quartz-styled tourbillon, no dive bezel on a dress slim)."},
+        {"id": "buildable",             "name": "Buildable spec",               "weight": 2, "guide": "Case, movement, crystal, strap and per-part finishes are specific enough for a watchmaker to quote."},
+        {"id": "story",                 "name": "Story / point of view",        "weight": 1, "guide": "A clear reason this watch exists; not a generic homage."}
+      ],
+      "anchors": {
+        "high": "38mm steel field watch, automatic, domed sapphire, cream dial with blued hands, tan strap — full part spec + a clear daily-wear story.",
+        "low":  "A cool luxury smartwatch-looking thing with lots of dials."
+      }
+    },
+    "trikot-design": {
+      "name": "Sports-kit design quality",
+      "criteria": [
+        {"id": "cut_fit",         "name": "Cut & fit honesty",                    "weight": 2, "guide": "Cut, collar and fit match the sport and silhouette (match-fit vs retro vs aero)."},
+        {"id": "panel_coherence", "name": "Panel / colour-block coherence",       "weight": 2, "guide": "Body, sleeves, side panels and trim read as one intentional kit, not random blocking."},
+        {"id": "fabric_honesty",  "name": "Fabric honesty",                       "weight": 1, "guide": "Fabric weight and finish suit the sport (aero mesh for racing, heavy cotton for retro)."},
+        {"id": "buildable",       "name": "Buildable spec",                       "weight": 2, "guide": "Cut, fabric, panels and per-panel colours are specific enough for a kit manufacturer to produce."},
+        {"id": "brand_neutral",   "name": "Brand-neutral & clean",                "weight": 1, "guide": "No real club crest, league patch or sponsor text; any number/name is intentional, not accidental clutter."}
+      ],
+      "anchors": {
+        "high": "Athletic-fit football jersey, forest-green body, cream rib V-collar, tan side panels, recycled poly — full panel spec, clean and brand-neutral.",
+        "low":  "A generic team shirt with a random logo and 'SPONSOR' across the chest."
+      }
+    },
+    "writing-clarity": {
+      "name": "Writing clarity (domain-agnostic prose)",
+      "criteria": [
+        {"id": "clarity",      "name": "Clarity",     "weight": 2, "guide": "Each sentence is unambiguous; a smart non-expert follows it on first read."},
+        {"id": "concreteness", "name": "Concreteness","weight": 2, "guide": "Claims are specific and grounded, not abstract hand-waving."},
+        {"id": "structure",    "name": "Structure",   "weight": 1, "guide": "Ideas are ordered so each builds on the last."},
+        {"id": "no_fluff",     "name": "No fluff",    "weight": 1, "guide": "No filler, hedging, or marketing padding; every sentence earns its place."}
+      ],
+      "anchors": {
+        "high": "Tight, concrete, ordered; cuts straight to the point with examples.",
+        "low":  "Long, abstract, full of 'leverage synergies to unlock value'."
+      }
+    },
+    "code-review": {
+      "name": "Code review (a function/diff)",
+      "criteria": [
+        {"id": "correctness", "name": "Correctness", "weight": 3, "guide": "Does what it claims; no logic bugs; edge cases handled."},
+        {"id": "robustness",  "name": "Robustness",  "weight": 2, "guide": "Validates inputs, handles errors/nulls, no obvious crash paths."},
+        {"id": "security",    "name": "Security",    "weight": 2, "guide": "No injection, no secrets, no unsafe eval/exec, safe data handling."},
+        {"id": "clarity",     "name": "Clarity",     "weight": 1, "guide": "Clear names, small scope, readable without comments."}
+      ],
+      "anchors": {
+        "high": "Validated inputs, parameterised queries, handled edge cases, clear names.",
+        "low":  "String-concatenated SQL, no validation, one-letter names, silent failures."
+      },
+      "examples": [
+        {"score": 9, "artifact": "function add(a,b){ if(typeof a!=='number'||typeof b!=='number') throw new Error('nums'); return a+b; }", "note": "validated, clear"},
+        {"score": 5, "artifact": "function add(a,b){ return a+b; }", "note": "works, no validation"},
+        {"score": 2, "artifact": "function q(d,x){ return d.query(\"SELECT * FROM t WHERE id=\"+x); }", "note": "SQL injection"}
+      ]
+    },
+    "legal-clause": {
+      "name": "Contract clause quality",
+      "criteria": [
+        {"id": "clarity",         "name": "Clarity",                 "weight": 2, "guide": "Unambiguous; a non-lawyer grasps the obligation and who it binds."},
+        {"id": "completeness",    "name": "Completeness",            "weight": 2, "guide": "Covers scope, exceptions, duration, remedy — no dangling gaps."},
+        {"id": "balance",         "name": "Balance / fairness",      "weight": 2, "guide": "Not unconscionably one-sided; obligations are mutual where expected."},
+        {"id": "enforceability",  "name": "Enforceability",          "weight": 1, "guide": "Specific and definite enough to be enforced; no vague 'reasonable efforts' alone."}
+      ],
+      "anchors": {
+        "high": "Defines the obligation, scope, carve-outs, duration and remedy in plain, mutual terms.",
+        "low":  "'Party may do things as appropriate' — vague, one-sided, no scope or remedy."
+      }
+    },
+    "cold-email": {
+      "name": "Cold outreach email (reply-worthiness)",
+      "criteria": [
+        {"id": "relevance",  "name": "Relevance / personalization", "weight": 2, "guide": "Clearly written for THIS recipient, not a blast; a specific reason to care."},
+        {"id": "brevity",    "name": "Brevity",                     "weight": 2, "guide": "Short enough to read in 15 seconds; no padding."},
+        {"id": "value",      "name": "Specific value",              "weight": 2, "guide": "A concrete, credible benefit — not 'synergies' or 'solutions'."},
+        {"id": "cta",        "name": "Clear ask",                   "weight": 1, "guide": "One easy, specific next step."}
+      ],
+      "anchors": {
+        "high": "Two lines, names a real trigger, one concrete benefit, a yes/no ask.",
+        "low":  "Six paragraphs about the sender, buzzwords, 'let's hop on a call to explore synergies'."
+      }
+    },
+    "resume-bullet": {
+      "name": "Resume bullet strength",
+      "criteria": [
+        {"id": "impact",      "name": "Quantified impact", "weight": 3, "guide": "A measurable result with numbers (%, time, money, scale)."},
+        {"id": "ownership",   "name": "Action & ownership","weight": 2, "guide": "Strong verb; clear what THIS person did, not the team."},
+        {"id": "specificity", "name": "Specificity",       "weight": 2, "guide": "Concrete what/how (tools, method), not vague 'various tasks'."},
+        {"id": "concise",     "name": "Concise",           "weight": 1, "guide": "One tight line; no filler."}
+      ],
+      "anchors": {
+        "high": "Cut API p95 latency 40% (820 -> 490ms) by adding Redis caching, serving 2M req/day.",
+        "low":  "Responsible for helping with various backend tasks and supporting the team."
+      }
+    }
+  }
+}

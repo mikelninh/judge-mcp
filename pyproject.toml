@@ -8,7 +8,7 @@ authors = [{ name = "Mikel" }]
 license = { text = "MIT" }
 
 dependencies = [
-    "mcp>=1.0.0",
+    "mcp>=1.0.0,<2",
     "openai>=1.0",
 ]
 

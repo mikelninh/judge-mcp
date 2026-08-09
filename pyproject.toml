@@ -1,6 +1,6 @@
 [project]
 name = "judge-mcp"
-version = "0.1.0"
+version = "0.2.0"
 description = "Domain-agnostic artifact judging + create-verify iteration as Model Context Protocol tools. The 'MCP for MCPs' — score any artifact against any rubric, iterate until quality clears a bar."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -8,12 +8,14 @@ authors = [{ name = "Mikel" }]
 license = { text = "MIT" }
 
 dependencies = [
-    "mcp>=1.0.0",
+    "mcp>=1.0.0,<2",
     "openai>=1.0",
 ]
 
 [project.scripts]
 judge-mcp = "judge_mcp.server:main"
+judge-artifact = "judge_mcp.cli:main"
+judge-gauntlet = "judge_mcp.gauntlet:main"
 
 [build-system]
 requires = ["setuptools>=68"]

@@ -14,6 +14,7 @@ dependencies = [
 
 [project.scripts]
 judge-mcp = "judge_mcp.server:main"
+judge-http = "judge_mcp.http_server:main"
 
 [build-system]
 requires = ["setuptools>=68"]
